@@ -16,6 +16,11 @@ Route::prefix('devices/{esp_identifier}')
         Route::get('/commands', [DeviceCommandController::class, 'next']);
     });
 
+Route::get(
+    '/devices/{esp_identifier}/test-reading',
+    [DeviceReadingController::class, 'test']
+)->middleware('device.auth');
+
 // ESP confirma que executou o comando
 Route::post(
     '/commands/{command}/confirm',

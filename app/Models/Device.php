@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use App\Models\Telemetry;
 use App\Models\Event;
 use App\Models\Schedule;
@@ -23,7 +24,8 @@ class Device extends Model
         'status'
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -45,5 +47,12 @@ class Device extends Model
     public function deviceCommands()
     {
         return $this->hasMany(DeviceCommand::class);
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($device) {
+            $device->api_token = Str::random(60);
+        });
     }
 }

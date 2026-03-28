@@ -9,6 +9,7 @@ use App\Models\Device;
 class Telemetry extends Model
 {
     protected $fillable = [
+        'device_id',
         'voltage',
         'current',
         'power',
