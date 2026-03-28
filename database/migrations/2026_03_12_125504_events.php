@@ -17,7 +17,7 @@ return new class extends Migration {
                 ->onDelete('cascade')
                 ->nullable();
             $table->string('event_type', 25);
-            $table->string('description', 255)->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

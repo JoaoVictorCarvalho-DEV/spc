@@ -15,7 +15,14 @@ return new class extends Migration {
             function (Blueprint $table) {
                 $table->id();
                 $table->string('name')->nullable();
+                $table->foreignId('user_id')
+                    ->constrained()
+                    ->cascadeOnDelete();
                 $table->string('device_uid')->nullable();
+
+                $table->string('esp_identifier')->unique();
+                $table->string('api_token', 80)->unique();
+
                 $table->string('location')->nullable();
                 $table->string('status')->nullable();
                 $table->timestamps();

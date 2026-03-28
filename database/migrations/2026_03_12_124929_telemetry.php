@@ -14,13 +14,18 @@ return new class extends Migration {
             'telemetry',
             function (Blueprint $table) {
                 $table->id();
+
                 $table->foreignId('device_id')
-                    ->constrained('devices')
-                    ->onDelete('cascade')
-                    ->nullable();
-                $table->string('current')->nullable();
-                $table->float('voltage', 4)->nullable();
-                $table->string('power')->nullable();
+                    ->constrained()
+                    ->cascadeOnDelete();
+
+                $table->float('voltage')->nullable();
+                $table->float('current');
+                $table->float('power');
+                $table->float('consumption')->nullable(); // kWh acumulado
+
+                $table->timestamp('measured_at');
+
                 $table->timestamps();
             }
         );
