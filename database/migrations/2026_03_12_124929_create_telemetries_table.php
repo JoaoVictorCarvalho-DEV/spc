@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create(
-            'telemetry',
+            'telemetries',
             function (Blueprint $table) {
                 $table->id();
 

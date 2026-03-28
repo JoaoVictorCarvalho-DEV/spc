@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('telemetry', function (Blueprint $table) {
+        Schema::table('telemetries', function (Blueprint $table) {
             $table->index(['device_id', 'measured_at']);
         });
 

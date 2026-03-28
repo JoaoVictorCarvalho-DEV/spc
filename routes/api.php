@@ -2,7 +2,22 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\DeviceCommandController;
+use App\Http\Controllers\Api\DeviceReadingController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::prefix('devices/{esp_identifier}')
+    ->middleware('device.auth')
+    ->group(function () {
+
+        // ESP envia leitura de energia
+        Route::post('/readings', [DeviceReadingController::class, 'store']);
+
+        // ESP consulta se há comando pendente (polling)
+        Route::get('/commands', [DeviceCommandController::class, 'next']);
+    });
+
+// ESP confirma que executou o comando
+Route::post(
+    '/commands/{command}/confirm',
+    [DeviceCommandController::class, 'confirm']
+)->middleware('device.auth');
