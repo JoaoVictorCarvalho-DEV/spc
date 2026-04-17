@@ -15,4 +15,9 @@ class Device extends Model
         'location',
         'status'
     ];
+
+    public function telemetry()
+    {
+        return $this->hasMany(Telemetry::class);
+    }
 }
