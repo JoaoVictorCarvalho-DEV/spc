@@ -15,8 +15,11 @@ return new class extends Migration {
             $table->foreignId('device_id')
                 ->constrained('devices')
                 ->onDelete('cascade');
-            $table->string('action', 50);
-            $table->string('status', 25);
+
+            $table->time('action_time');
+            $table->enum('action', ['turn_on', 'turn_off']);
+            $table->boolean('active')->default(true);
+            
             $table->timestamps();
         });
     }

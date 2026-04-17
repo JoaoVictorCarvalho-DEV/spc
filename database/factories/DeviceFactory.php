@@ -21,10 +21,14 @@ class DeviceFactory extends Factory
             'name' => fake()->word(),
             'device_uid' => fake()->uuid() . '-device',
             'location' => fake()->address(),
-            'status' => $this->faker->randomElement([
-                'online',
-                'offline'
-            ]),
+            'status' => $this->faker->randomElement(
+                [
+                    'online',
+                    'offline'
+                ],
+            ),
+            'user_id' => 1,
+            'esp_identifier' => fake()->uuid() . "-" . fake()->word()
 
         ];
     }
