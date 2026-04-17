@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\Device;
+
 class DeviceAuth
 {
     /**
@@ -15,6 +16,7 @@ class DeviceAuth
      */
     public function handle($request, Closure $next)
     {
+        
         $token = $request->header('Device-Token');
 
         $device = Device::where('api_token', $token)->first();

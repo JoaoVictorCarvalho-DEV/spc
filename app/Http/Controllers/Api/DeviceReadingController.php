@@ -36,7 +36,7 @@ class DeviceReadingController extends Controller
             'is_online' => true,
         ]);
 
-        // 🔎 Regra inteligente: detectar aparelho desconectado
+
         if ($data['current'] < 0.05) {
             Event::create([
                 'device_id'   => $device->id,
@@ -45,14 +45,13 @@ class DeviceReadingController extends Controller
             ]);
         }
 
-        // 🔎 Regra inteligente: consumo alto
-        if ($data['power'] > 1000) {
+        /* if ($data['power'] > 1000) {
             Event::create([
                 'device_id'   => $device->id,
                 'type'        => 'high_consumption',
                 'description' => 'Consumo acima de 1000W detectado.',
             ]);
-        }
+        } */
 
         return response()->json(['status' => 'ok']);
     }
