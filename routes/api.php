@@ -16,6 +16,7 @@ Route::prefix('devices/{esp_identifier}')
         Route::get('/commands', [DeviceCommandController::class, 'next']);
 
         Route::post('/commands', [DeviceCommandController::class, 'store']);
+        Route::post('/commands/{command}/confirm', [DeviceCommandController::class, 'confirmCommand']);
 
     });
 

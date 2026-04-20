@@ -196,7 +196,7 @@ const formatTime = (seconds) => {
               <div>
                 <p class="text-sm text-gray-500">Tempo ligado hoje</p>
                 <p class="text-2xl font-bold text-gray-800">
-                  {{ formatTime(stats.tempo_ligado_hoje) }}
+                  {{ stats.tempo_ligado_hoje }}
                 </p>
               </div>
             </div>
@@ -211,7 +211,7 @@ const formatTime = (seconds) => {
               <div>
                 <p class="text-sm text-gray-500">Potência média</p>
                 <p class="text-2xl font-bold text-gray-800">
-                  {{ stats.potencia_media_ligado ?? "—" }}
+                  {{ stats.potencia_media_ligado.toFixed(2) ?? "—" }}
                   <span class="text-sm font-normal text-gray-500">W</span>
                 </p>
               </div>

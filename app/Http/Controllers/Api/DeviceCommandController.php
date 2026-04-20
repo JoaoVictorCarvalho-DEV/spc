@@ -17,7 +17,7 @@ class DeviceCommandController extends Controller
         $deviceCommand = $device->deviceCommands()
             ->where('executed', false)
             ->oldest()
-            ->first();
+            ->first(['id', 'command']);
 
 
         return response()->json(
@@ -26,6 +26,17 @@ class DeviceCommandController extends Controller
             ],
             200
         );
+    }
+
+
+    public function confirmCommand(Request $request, $espIdentifier, DeviceCommand $command)
+    {
+
+        if (!$command->update(['executed' => true])) {
+            return response()->json(['message' => 'error'], 400);
+        }
+
+        return response()->json(['message' => 'success'], 201);
     }
 
     public function store(Request $request)

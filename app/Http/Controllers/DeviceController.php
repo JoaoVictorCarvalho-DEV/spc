@@ -77,7 +77,7 @@ class DeviceController extends Controller
             'stats' => [
                 'consumo_atual' => round($consumoHoje, 3),
                 'eventos_hoje' => $device->events()->whereDate('created_at', today())->count(),
-                'desligamentos_programados' => $device->schedules()->count(),
+                'desligamentos_programados' => $device->deviceCommands()->count(),
                 'consumo_ontem' => $consumoOntem,
                 'tempo_ligado_hoje' => $tempoLigadoHoje,
                 'pico_hoje' => $picoHoje,
