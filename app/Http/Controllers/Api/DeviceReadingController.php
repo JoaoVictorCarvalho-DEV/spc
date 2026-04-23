@@ -10,7 +10,7 @@ use App\Models\Event;
 
 class DeviceReadingController extends Controller
 {
-    public function store(Request $request, $esp_identifier)
+    public function store(Request $request)
     {
         $device = $request->input('device');
 
@@ -18,7 +18,7 @@ class DeviceReadingController extends Controller
             'current'      => 'required|numeric',
             'voltage'      => 'nullable|numeric',
             'power'        => 'required|numeric',
-            'consumption'  => 'nullable|numeric',
+            'onState'  => 'boolean',
         ]);
 
         // Salva a telemetria
@@ -27,20 +27,19 @@ class DeviceReadingController extends Controller
             'current'     => $data['current'],
             'voltage'     => $data['voltage'] ?? null,
             'power'       => $data['power'],
-            'consumption' => $data['consumption'] ?? null,
             'measured_at' => Carbon::now(),
         ]);
 
         // Marca device como online
         $device->update([
-            'is_online' => true,
+            'status' => 'online',
         ]);
 
 
         if ($data['current'] < 0.05) {
             Event::create([
                 'device_id'   => $device->id,
-                'type'        => 'unplugged',
+                'event_type'        => 'unplugged',
                 'description' => 'Corrente próxima de zero detectada.',
             ]);
         }
@@ -58,9 +57,10 @@ class DeviceReadingController extends Controller
 
 
     //TESTE PARA SIMULAR O ENVIO DE INFORMACOES DO ESP PARA O SERVIDOR
-    public function test(Request $request, $esp_identifier)
+    public function test(Request $request)
     {
         $device = $request->input('device');
+
 
         // Dados mockados
         $mock = [

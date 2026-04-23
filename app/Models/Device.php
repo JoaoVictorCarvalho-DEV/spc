@@ -39,10 +39,6 @@ class Device extends Model
         return $this->hasMany(Event::class);
     }
 
-    public function schedules()
-    {
-        return $this->hasMany(Schedule::class);
-    }
 
     public function deviceCommands()
     {

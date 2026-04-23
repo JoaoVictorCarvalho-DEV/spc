@@ -14,15 +14,20 @@ Route::prefix('devices/{esp_identifier}')
 
         // ESP consulta se há comando pendente (polling)
         Route::get('/commands', [DeviceCommandController::class, 'next']);
+
+        Route::post('/commands', [DeviceCommandController::class, 'store']);
+        Route::post('/commands/{command}/confirm', [DeviceCommandController::class, 'confirmCommand']);
+
     });
 
-Route::get(
-    '/devices/{esp_identifier}/test-reading',
-    [DeviceReadingController::class, 'test']
-)->middleware('device.auth');
 
 // ESP confirma que executou o comando
 Route::post(
     '/commands/{command}/confirm',
     [DeviceCommandController::class, 'confirm']
+)->middleware('device.auth');
+
+Route::get(
+    '/devices/{esp_identifier}/test-reading',
+    [DeviceReadingController::class, 'test']
 )->middleware('device.auth');
