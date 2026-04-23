@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\DeviceCommand;
 use Illuminate\Http\Request;
 use App\Models\Telemetry;
 use Carbon\Carbon;
@@ -44,13 +45,23 @@ class DeviceReadingController extends Controller
             ]);
         }
 
-        /* if ($data['power'] > 1000) {
-            Event::create([
-                'device_id'   => $device->id,
-                'type'        => 'high_consumption',
-                'description' => 'Consumo acima de 1000W detectado.',
+        $command = DeviceCommand::where('device_id', $device->id)
+            ->where('executed', 0)
+            ->where('execute_at', '<=', now())
+            ->orderBy('execute_at')
+            ->first();
+
+        if ($command) {
+            $command->executed = 1;
+            $command->updated_at = now();
+            $command->save();
+
+            return response()->json([
+                'status' => 'ok',
+                'should_execute' => true,
+                'command' => $command->command,
             ]);
-        } */
+        }
 
         return response()->json(['status' => 'ok']);
     }

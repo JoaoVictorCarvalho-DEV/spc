@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('command', ['turn_on', 'turn_off']);
 
             $table->boolean('executed')->default(false);
-            $table->timestamp('executed_at')->nullable();
+            $table->timestamp('execute_at')->nullable();
 
             $table->timestamps();
         });
