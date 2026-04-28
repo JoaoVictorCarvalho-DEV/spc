@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DeviceCommandController;
 use App\Http\Controllers\Api\DeviceReadingController;
 
+use App\Http\Controllers\CommandController;
+
 Route::prefix('devices/{esp_identifier}')
     ->middleware('device.auth')
     ->group(function () {
@@ -16,9 +18,11 @@ Route::prefix('devices/{esp_identifier}')
         Route::get('/commands', [DeviceCommandController::class, 'next']);
 
         Route::post('/commands', [DeviceCommandController::class, 'store']);
-        Route::post('/commands/{command}/confirm', [DeviceCommandController::class, 'confirmCommand']);
 
+        Route::post('/commands/{command}/confirm', [DeviceCommandController::class, 'confirmCommand']);
     });
+
+Route::post('/devices/{device}/command', [CommandController::class, 'store'])->name('devices.command.store');
 
 
 // ESP confirma que executou o comando

@@ -19,6 +19,7 @@ class Device extends Model
         'name',
         'user_id',
         'device_uid',
+        'esp_identifier',
         'location',
         'api_token',
         'status'

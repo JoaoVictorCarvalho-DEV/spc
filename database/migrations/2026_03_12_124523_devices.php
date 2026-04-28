@@ -24,7 +24,7 @@ return new class extends Migration {
                 $table->string('api_token', 80)->unique();
 
                 $table->string('location')->nullable();
-                $table->string('status')->nullable();
+                $table->string('status')->default('offline');
                 $table->timestamps();
             }
         );
