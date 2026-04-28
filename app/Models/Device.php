@@ -45,10 +45,14 @@ class Device extends Model
         return $this->hasMany(DeviceCommand::class);
     }
 
+    public function appliences(){
+        return $this->belongsToMany(Applience::class);
+    }
     protected static function booted()
     {
         static::creating(function ($device) {
             $device->api_token = Str::random(60);
         });
     }
+
 }

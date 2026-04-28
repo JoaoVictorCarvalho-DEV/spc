@@ -2,7 +2,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import {
-  Power,
   Zap,
   Activity,
   Calendar,
@@ -94,7 +93,7 @@ const formatTime = (seconds) => {
                 </div>
                 <div class="flex items-baseline gap-1">
                   <span class="text-4xl font-bold text-white">
-                    {{ stats.consumo_atual?.toFixed(2) ?? "0" }}
+                    {{ stats.consumo_atual ?? "0" }}
                   </span>
                   <span class="text-blue-100">Watts</span>
                 </div>
@@ -211,7 +210,7 @@ const formatTime = (seconds) => {
               <div>
                 <p class="text-sm text-gray-500">Potência média</p>
                 <p class="text-2xl font-bold text-gray-800">
-                  {{ stats.potencia_media_ligado.toFixed(2) ?? "—" }}
+                  {{ stats.potencia_media_ligado ?? "—" }}
                   <span class="text-sm font-normal text-gray-500">W</span>
                 </p>
               </div>
