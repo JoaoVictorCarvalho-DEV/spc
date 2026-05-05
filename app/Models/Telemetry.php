@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Device;
 
 class Telemetry extends Model
 {
+    /** @use HasFactory<\Database\Factories\TelemetryFactory> */
+    use HasFactory;
+
     protected $fillable = [
         'device_id',
-        'voltage',
         'current',
+        'voltage',
         'power',
-        'consumption',
-        'measured_at'
+        'created_at',
     ];
 
     public function device(){
