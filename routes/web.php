@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommandController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DeviceController;
 use Illuminate\Foundation\Application;
@@ -17,9 +18,18 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard',[DeviceController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DeviceController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/devices/{device}', [DeviceController::class, 'show'])->middleware(['auth', 'verified'])->name('devices.show');
+
+Route::prefix('devices')->name('devices.')->group(function () {
+    Route::get('/create', [DeviceController::class, 'create'])->name('create');
+    Route::post('/', [DeviceController::class, 'store'])->name('store');
+    Route::get('/{device}', [DeviceController::class, 'show'])->name('show');
+    Route::post('/device/shutdown', [DeviceController::class, 'shutdown'])->name('shutdown');
+})->middleware(['auth', 'verified']);
+
+/* Route::post('/{device}/command', [CommandController::class, 'store'])->name('command.store'); */
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -27,4 +37,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

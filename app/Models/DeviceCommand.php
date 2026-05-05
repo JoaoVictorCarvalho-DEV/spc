@@ -10,7 +10,7 @@ class DeviceCommand extends Model
         'device_id',
         'command',
         'executed',
-        'executed_at'
+        'execute_at'
     ];
 
     public function device(){

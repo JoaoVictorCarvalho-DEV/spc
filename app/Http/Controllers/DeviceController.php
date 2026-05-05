@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class DeviceController extends Controller
 {
@@ -25,7 +26,7 @@ class DeviceController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("Devices/Create");
     }
 
     /**
@@ -33,7 +34,30 @@ class DeviceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $user_id = auth()->user()->id;
+
+
+            $data = $request->validate(
+                [
+                    'name' => ['required', 'string'],
+                    'location' => ['required'],
+                    'esp_identifier' => ['required', 'string']
+                ]
+            );
+
+            $data['user_id'] = $user_id;
+
+
+            $device = Device::create($data);
+
+            if ($device) {
+                return redirect()->route('dashboard')->with('success', 'Sensor criado com sucesso!');
+            }
+        } catch (ValidationException $e) {
+            // Os erros serão automaticamente enviados para o frontend
+            throw $e;
+        }
     }
 
 

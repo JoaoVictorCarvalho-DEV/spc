@@ -19,6 +19,7 @@ class Device extends Model
         'name',
         'user_id',
         'device_uid',
+        'esp_identifier',
         'location',
         'api_token',
         'status'
@@ -45,10 +46,14 @@ class Device extends Model
         return $this->hasMany(DeviceCommand::class);
     }
 
+    public function appliences(){
+        return $this->belongsToMany(Applience::class);
+    }
     protected static function booted()
     {
         static::creating(function ($device) {
             $device->api_token = Str::random(60);
         });
     }
+
 }
