@@ -28,8 +28,6 @@ Route::prefix('devices')->name('devices.')->group(function () {
     Route::post('/device/shutdown', [DeviceController::class, 'shutdown'])->name('shutdown');
 })->middleware(['auth', 'verified']);
 
-/* Route::post('/{device}/command', [CommandController::class, 'store'])->name('command.store'); */
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

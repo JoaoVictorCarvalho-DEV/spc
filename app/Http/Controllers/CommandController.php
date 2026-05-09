@@ -11,34 +11,62 @@ class CommandController extends Controller
 {
 
     public function store(Request $request, int $device_id)
-    {
+{
+    $device = Device::find($device_id, ['*']);
 
-        $device = Device::find($device_id, 'status');
-
-
-        switch ($device->status) {
-            case 'online':
-                $command = 'turn_off';
-                break;
-            case 'offline':
-                $command = 'turn_on';
-                break;
-            default:
-                return false;
-        }
-
-        $data = [
-            'device_id' => $device_id,
-            'command' => $command,
-            'executed' => 0,
-            'execute_at' => Carbon::now()
-        ];
-
-        $device = DeviceCommand::create($data);
-
-        if ($device) {
-            return true;
-        }
-        return false;
+    if (!$device) {
+        return response()->json(['error' => 'Dispositivo não encontrado'], 404);
     }
+
+    //Para verificar se já existe um comando antigo não executado
+    $pendingCommand = DeviceCommand::where('device_id', $device_id)
+        ->where('executed', 0)
+        ->where('execute_at', '<=', Carbon::now()) 
+        ->first();
+
+    if ($pendingCommand) {
+        $timeElapsed = Carbon::now()->diffForHumans($pendingCommand->execute_at);
+
+        return response()->json([
+            'error' => 'Já existe um comando pendente para este dispositivo',
+            'pending_command' => [
+                'id' => $pendingCommand->id,
+                'command' => $pendingCommand->command,
+                'execute_at' => $pendingCommand->execute_at,
+                'time_elapsed' => $timeElapsed
+            ]
+        ], 409); // 409 Conflict
+    }
+
+    // Seu código existente
+    switch ($device->status) {
+        case 'online':
+            $command = 'turn_off';
+            break;
+        case 'offline':
+            $command = 'turn_on';
+            break;
+        default:
+            return response()->json(['error' => 'Status inválido'], 400);
+    }
+
+    $data = [
+        'device_id' => $device_id,
+        'command' => $command,
+        'executed' => 0,
+        'execute_at' => Carbon::now()
+    ];
+
+    $deviceCommand = DeviceCommand::create($data);
+
+    if ($deviceCommand) {
+        return response()->json([
+            'success' => true,
+            'message' => 'Comando adicionado com sucesso',
+            'command' => $deviceCommand
+        ], 201);
+    }
+
+    return response()->json(['error' => 'Erro ao criar comando'], 500);
+}
 }

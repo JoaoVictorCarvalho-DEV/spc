@@ -21,7 +21,7 @@ class TelemetryController extends Controller
      */
     public function create()
     {
-        
+
     }
 
     /**
@@ -29,7 +29,7 @@ class TelemetryController extends Controller
      */
     public function store(StoreTelemetryRequest $request)
     {
-        $dados = $request->va
+       
     }
 
     /**

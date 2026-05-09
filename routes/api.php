@@ -24,14 +24,17 @@ Route::prefix('devices/{esp_identifier}')
 
 Route::post('/devices/{device}/command', [CommandController::class, 'store'])->name('devices.command.store');
 
+Route::post('/devices/{device_id}/commands/toggle', [CommandController::class, 'store'])
+    ->name('api.devices.commands.toggle');
 
-// ESP confirma que executou o comando
-Route::post(
-    '/commands/{command}/confirm',
-    [DeviceCommandController::class, 'confirm']
-)->middleware('device.auth');
 
 Route::get(
     '/devices/{esp_identifier}/test-reading',
     [DeviceReadingController::class, 'test']
 )->middleware('device.auth');
+
+        // ESP confirma que executou o comando
+        /* Route::post(
+            '/commands/{command}/confirm',
+            [DeviceCommandController::class, 'confirm']
+        )->middleware('device.auth'); */
