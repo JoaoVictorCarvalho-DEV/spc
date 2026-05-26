@@ -11,6 +11,7 @@ const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <div>
         <div class="min-h-screen bg-gray-100">
             <nav

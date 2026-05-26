@@ -28,7 +28,11 @@ Route::prefix('devices')->name('devices.')->group(function () {
     Route::post('/device/shutdown', [DeviceController::class, 'shutdown'])->name('shutdown');
 })->middleware(['auth', 'verified']);
 
-/* Route::post('/{device}/command', [CommandController::class, 'store'])->name('command.store'); */
+
+Route::prefix('commands')->name('commands.')->group(function () {
+    Route::get('/create/device/{device_id}', [CommandController::class, 'create'])->name('create');
+    Route::post('/create/device/{device_id}', [CommandController::class, 'storeAgendado'])->name('create');
+})->middleware(['auth', 'verified']);
 
 
 Route::middleware('auth')->group(function () {
