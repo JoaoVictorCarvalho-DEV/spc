@@ -31,7 +31,7 @@ Route::prefix('devices')->name('devices.')->group(function () {
 
 Route::prefix('commands')->name('commands.')->group(function () {
     Route::get('/create/device/{device_id}', [CommandController::class, 'create'])->name('create');
-    Route::post('/create/device/{device_id}', [CommandController::class, 'storeAgendado'])->name('create');
+    Route::post('/create/device/{device_id}', [CommandController::class, 'storeAgendado'])->name('store');
 })->middleware(['auth', 'verified']);
 
 

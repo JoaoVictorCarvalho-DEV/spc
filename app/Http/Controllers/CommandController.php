@@ -80,13 +80,11 @@ class CommandController extends Controller
     }
 
 
-    public function storeAgendado(Request $request, int $device_id)
+    /* public function storeAgendado(Request $request, int $device_id)
     {
         $device = Device::find($device_id, ['*']);
 
         $data = $request->all();
-
-        dd($data);
 
         if (!$device) {
             return response()->json(['error' => 'Dispositivo não encontrado'], 404);
@@ -102,9 +100,9 @@ class CommandController extends Controller
         $deviceCommand = DeviceCommand::create($dataCommand);
 
         if ($deviceCommand) {
-            return redirect()->route('dashboard')->with('success', 'Sensor criado com sucesso!');
+            return redirect()->route('dashboard')->with('success', 'Agendamento concluído com sucesso!');
         }
 
         return response()->json(['error' => 'Erro ao criar comando'], 500);
-    }
+    } */
 }
