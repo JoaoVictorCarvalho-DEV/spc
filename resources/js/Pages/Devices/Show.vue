@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import {
   Zap,
   Activity,
@@ -232,12 +232,13 @@ const formatTime = (seconds) => {
                 </p>
               </div>
             </div>
-            <button
+            <Link
               class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition flex items-center gap-2"
+              :href="route('commands.create', device.id)"
             >
               <Clock :size="16" />
               + Novo agendamento
-            </button>
+            </Link>
           </div>
         </div>
 

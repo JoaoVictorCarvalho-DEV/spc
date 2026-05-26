@@ -32,12 +32,15 @@ class DeviceReadingController extends Controller
         ]);
 
         // Marca device como online
-        $device->update([
-            'status' => 'online',
-        ]);
+        /* if ($data['current'] > 0.2) {
+            $device->update([
+                'status' => 'online',
+            ]);
+        } */
 
 
-        if ($data['current'] < 0.05) {
+
+        if ($data['current'] < 0.2) {
             Event::create([
                 'device_id'   => $device->id,
                 'event_type'        => 'unplugged',
@@ -45,7 +48,7 @@ class DeviceReadingController extends Controller
             ]);
         }
 
-        $command = DeviceCommand::where('device_id',$device->id)
+        $command = DeviceCommand::where('device_id', $device->id)
             ->where('executed', 0)
             ->where('execute_at', '<=', now())
             ->orderBy('execute_at')
