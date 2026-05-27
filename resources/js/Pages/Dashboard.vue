@@ -6,8 +6,9 @@ import DevicePowerButton from "@/Components/DeviceToggleButton.vue";
 import ToastManager from "@/Components/ToastManager.vue";
 import { Power, Zap, Activity, Clock, DollarSign, Cpu, Plus } from "@lucide/vue";
 
-const { devices } = defineProps({
+const props = defineProps({
   devices: Array,
+  dashboardStats: Array,
 });
 
 // Formatar moeda brasileira
@@ -18,46 +19,31 @@ const formatCurrency = (value) => {
   }).format(value);
 };
 
-// Estatísticas calculadas
-const dashboardStats = [
-  {
-    name: "Dispositivos ativos",
-    value: devices.filter((d) => d.status === "online").length,
+const iconMap = {
+  active_devices: {
     icon: Power,
     iconBg: "bg-green-50",
     iconColor: "text-green-600",
-    suffix: "",
-    prefix: "",
   },
-  {
-    name: "Consumo total",
-    value: "420",
+
+  consumption: {
     icon: Zap,
     iconBg: "bg-blue-50",
     iconColor: "text-blue-600",
-    suffix: "W",
-    prefix: "",
   },
-  {
-    name: "Eventos hoje",
-    value: 12,
+
+  events: {
     icon: Activity,
     iconBg: "bg-purple-50",
     iconColor: "text-purple-600",
-    suffix: "",
-    prefix: "",
   },
-  {
-    name: "Custo estimado",
-    value: 2.45,
+
+  cost: {
     icon: DollarSign,
     iconBg: "bg-green-50",
     iconColor: "text-green-600",
-    suffix: "",
-    prefix: "R$",
-    format: true,
   },
-];
+};
 
 const events = [
   {
@@ -76,6 +62,11 @@ const events = [
     time: "09:10",
   },
 ];
+
+const dashboardStats = props.dashboardStats.map((item) => ({
+  ...item,
+  ...iconMap[item.type],
+}));
 </script>
 
 <template>
@@ -84,7 +75,7 @@ const events = [
   <AuthenticatedLayout>
     <ToastManager />
     <template #header>
-      <h2 class="text-xl font-semibold leading-tight text-gray-800">Dashboard</h2>
+      <h2 c lass="text-xl font-semibold leading-tight text-gray-800">Dashboard</h2>
     </template>
 
     <div class="py-10">
@@ -114,7 +105,7 @@ const events = [
 
           <div class="divide-y">
             <div
-              v-for="device in devices"
+              v-for="device in props.devices"
               :key="device.id"
               class="block hover:bg-gray-50 transition"
             >

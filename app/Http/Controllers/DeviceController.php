@@ -18,7 +18,38 @@ class DeviceController extends Controller
     public function index()
     {
         $devices = Device::all();
-        return Inertia::render('Dashboard', compact('devices'));
+        $dashboardStats = [
+            [
+                'name' => 'Dispositivos ativos',
+                'value' => $devices->where('status', 'online')->count(),
+                'type' => 'active_devices',
+                'suffix' => '',
+                'prefix' => '',
+            ],
+            [
+                'name' => 'Consumo total',
+                'value' => 0,
+                'type' => 'consumption',
+                'suffix' => 'W',
+                'prefix' => '',
+            ],
+            [
+                'name' => 'Eventos hoje',
+                'value' => 0,
+                'type' => 'events',
+                'suffix' => '',
+                'prefix' => '',
+            ],
+            [
+                'name' => 'Custo estimado',
+                'value' => 0.0,
+                'type' => 'cost',
+                'suffix' => '',
+                'prefix' => 'R$',
+                'format' => true,
+            ],
+        ];
+        return Inertia::render('Dashboard', compact('devices', 'dashboardStats'));
     }
 
     /**
