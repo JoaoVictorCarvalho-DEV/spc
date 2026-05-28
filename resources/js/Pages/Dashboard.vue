@@ -22,26 +22,26 @@ const formatCurrency = (value) => {
 const iconMap = {
   active_devices: {
     icon: Power,
-    iconBg: "bg-green-50",
-    iconColor: "text-green-600",
+    iconBg: "bg-emerald-500/10",
+    iconColor: "text-emerald-300",
   },
 
   consumption: {
     icon: Zap,
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-600",
+    iconBg: "bg-sky-500/10",
+    iconColor: "text-sky-300",
   },
 
   events: {
     icon: Activity,
-    iconBg: "bg-purple-50",
-    iconColor: "text-purple-600",
+    iconBg: "bg-violet-500/10",
+    iconColor: "text-violet-300",
   },
 
   cost: {
     icon: DollarSign,
-    iconBg: "bg-green-50",
-    iconColor: "text-green-600",
+    iconBg: "bg-emerald-500/10",
+    iconColor: "text-emerald-300",
   },
 };
 
@@ -75,7 +75,7 @@ const dashboardStats = props.dashboardStats.map((item) => ({
   <AuthenticatedLayout>
     <ToastManager />
     <template #header>
-      <h2 c lass="text-xl font-semibold leading-tight text-gray-800">Dashboard</h2>
+      <h2 class="text-xl font-semibold leading-tight text-white">Dashboard</h2>
     </template>
 
     <div class="py-10">
@@ -86,28 +86,28 @@ const dashboardStats = props.dashboardStats.map((item) => ({
         </div>
 
         <!-- Dispositivos -->
-        <div class="bg-white shadow rounded-lg">
-          <div class="flex justify-between p-6 border-b">
+        <div class="bg-slate-900 border border-slate-800 shadow-slate-950/40 rounded-3xl">
+          <div class="flex justify-between p-6 border-b border-slate-800">
             <div class="flex items-center gap-2">
-              <Cpu :size="20" class="text-gray-500" />
-              <h3 class="text-lg font-semibold">Dispositivos</h3>
+              <Cpu :size="20" class="text-slate-300" />
+              <h3 class="text-lg font-semibold text-white">Dispositivos</h3>
             </div>
             <div>
-              <Link :href="route('devices.create')" class="flex items-center gap-2">
+              <Link :href="route('devices.create')" class="flex items-center gap-2 text-slate-300 hover:text-white">
                 <Plus
                   :size="16"
-                  class="text-gray-400 hover:text-gray-600 cursor-pointer"
+                  class="text-slate-400 hover:text-white cursor-pointer"
                 />
                 <h3 class="text-lg font-semibold">Cadastrar novo</h3>
               </Link>
             </div>
           </div>
 
-          <div class="divide-y">
+          <div class="divide-y divide-slate-800">
             <div
               v-for="device in props.devices"
               :key="device.id"
-              class="block hover:bg-gray-50 transition"
+              class="block hover:bg-slate-900/90 transition"
             >
               <div class="flex items-center justify-between p-6">
                 <div class="flex items-center gap-3">
@@ -125,11 +125,11 @@ const dashboardStats = props.dashboardStats.map((item) => ({
                       :href="route('devices.show', device.id)"
                       class="hover:underline"
                     >
-                      <p class="font-medium text-gray-800">
+                      <p class="font-medium text-white">
                         {{ device.name }}
                       </p>
                     </Link>
-                    <p class="text-sm text-gray-500 flex items-center gap-1">
+                    <p class="text-sm text-slate-400 flex items-center gap-1">
                       <Zap :size="12" />
                       Consumo: {{ device.power ?? "—" }}
                       <span v-if="device.power" class="text-xs">W</span>
@@ -142,13 +142,13 @@ const dashboardStats = props.dashboardStats.map((item) => ({
                     class="px-3 py-1 text-sm rounded-full inline-flex items-center gap-2"
                     :class="
                       device.status === 'online'
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-gray-200 text-gray-700'
+                        ? 'bg-emerald-500/10 text-emerald-300'
+                        : 'bg-slate-800 text-slate-400'
                     "
                   >
                     <div
                       class="w-1.5 h-1.5 rounded-full"
-                      :class="device.status === 'online' ? 'bg-green-600' : 'bg-gray-500'"
+                      :class="device.status === 'online' ? 'bg-emerald-400' : 'bg-slate-500'"
                     ></div>
                     {{ device.status }}
                   </span>
@@ -159,28 +159,28 @@ const dashboardStats = props.dashboardStats.map((item) => ({
         </div>
 
         <!-- Eventos Recentes -->
-        <div class="bg-white shadow rounded-lg">
-          <div class="p-6 border-b">
+        <div class="bg-slate-900 border border-slate-800 shadow-slate-950/40 rounded-3xl">
+          <div class="p-6 border-b border-slate-800">
             <div class="flex items-center gap-2">
-              <Activity :size="20" class="text-gray-500" />
-              <h3 class="text-lg font-semibold">Eventos recentes</h3>
+              <Activity :size="20" class="text-slate-300" />
+              <h3 class="text-lg font-semibold text-white">Eventos recentes</h3>
             </div>
           </div>
 
-          <div class="divide-y">
+          <div class="divide-y divide-slate-800">
             <div
               v-for="event in events"
               :key="event.time"
-              class="flex justify-between items-center p-6 text-sm hover:bg-gray-50 transition"
+              class="flex justify-between items-center p-6 text-sm hover:bg-slate-900/90 transition"
             >
               <div class="flex items-center gap-3">
-                <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div class="w-2 h-2 bg-emerald-400 rounded-full"></div>
                 <div>
-                  <span class="font-medium">{{ event.device }}</span>
-                  <span class="text-gray-600"> — {{ event.event }}</span>
+                  <span class="font-medium text-white">{{ event.device }}</span>
+                  <span class="text-slate-400"> — {{ event.event }}</span>
                 </div>
               </div>
-              <span class="text-gray-500 flex items-center gap-1">
+              <span class="text-slate-400 flex items-center gap-1">
                 <Clock :size="12" />
                 {{ event.time }}
               </span>

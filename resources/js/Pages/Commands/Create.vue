@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import { Head, useForm, router } from "@inertiajs/vue3";
 import {
   Thermometer,
   Droplet,
@@ -12,55 +12,75 @@ import {
   Zap,
   AlertCircle,
   Command,
+  CheckCircle,
+  Clock,
 } from "@lucide/vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
+
+const props = defineProps({
+  device: Object,
+  available_commands: Array
+});
 
 const form = useForm({
   command: "",
   execute_at: "",
 });
 
+// Estados de UI
 const showSuccess = ref(false);
+const showError = ref(false);
+const errorMessage = ref("");
+const isLoading = ref(false);
 
-const sensorTypes = [
-  { value: "temperature", label: "Temperatura", icon: Thermometer },
-  { value: "humidity", label: "Umidade", icon: Droplet },
-  { value: "pressure", label: "Pressão", icon: Gauge },
-  { value: "air_quality", label: "Qualidade do Ar", icon: Wind },
-  { value: "power", label: "Energia", icon: Zap },
-  { value: "motion", label: "Movimento", icon: Activity },
-];
-
-const locations = [
-  { value: "living_room", label: "Sala de Estar" },
-  { value: "bedroom", label: "Quarto" },
-  { value: "kitchen", label: "Cozinha" },
-  { value: "bathroom", label: "Banheiro" },
-  { value: "office", label: "Escritório" },
-  { value: "garage", label: "Garagem" },
-  { value: "garden", label: "Jardim" },
-];
-
-const units = [
-  { value: "°C", label: "Graus Celsius (°C)" },
-  { value: "%", label: "Porcentagem (%)" },
-  { value: "hPa", label: "Hectopascal (hPa)" },
-  { value: "ppm", label: "Partes por milhão (ppm)" },
-  { value: "W", label: "Watts (W)" },
-  { value: "V", label: "Volts (V)" },
-  { value: "A", label: "Amperes (A)" },
-];
+// Computed para data mínima
+const minDateTime = computed(() => {
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  return now.toISOString().slice(0, 16);
+});
 
 const submit = () => {
-  form.post(route("devices.store"), {
-    onSuccess: () => {
+  isLoading.value = true;
+
+  form.post(route("commands.storeForm", props.device.id), {
+    preserveScroll: true,
+    onSuccess: (page) => {
+      isLoading.value = false;
       showSuccess.value = true;
+      errorMessage.value = "";
+      form.reset();
+
       setTimeout(() => {
         showSuccess.value = false;
-      }, 3000);
-      form.reset();
+      }, 5000);
+    },
+    onError: (errors) => {
+      isLoading.value = false;
+      showError.value = true;
+
+      // Formatar mensagens de erro
+      if (errors.error) {
+        errorMessage.value = errors.error;
+      } else if (errors.command) {
+        errorMessage.value = errors.command;
+        form.errors.command = errors.command;
+      } else if (errors.execute_at) {
+        errorMessage.value = errors.execute_at;
+        form.errors.execute_at = errors.execute_at;
+      } else {
+        errorMessage.value = "Ocorreu um erro ao processar o agendamento. Verifique os dados e tente novamente.";
+      }
+
+      setTimeout(() => {
+        showError.value = false;
+      }, 5000);
     },
   });
+};
+
+const cancel = () => {
+  router.visit(route('devices.show', props.device.id));
 };
 </script>
 
@@ -70,12 +90,12 @@ const submit = () => {
   <AuthenticatedLayout>
     <template #header>
       <div class="flex items-center justify-between">
-        <h2 class="text-xl font-semibold leading-tight text-gray-800">
-          Novo agendamento
+        <h2 class="text-xl font-semibold leading-tight text-white">
+          Novo agendamento para {{ device.name }}
         </h2>
         <button
-          @click="$inertia.visit(route('sensors.index'))"
-          class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition"
+          @click="cancel"
+          class="flex items-center gap-2 px-4 py-2 text-sm text-slate-300 hover:text-white transition"
         >
           <X :size="16" />
           Cancelar
@@ -85,89 +105,130 @@ const submit = () => {
 
     <div class="py-10">
       <div class="mx-auto max-w-3xl sm:px-6 lg:px-8">
+        <!-- Mensagem de erro -->
+        <div
+          v-if="showError"
+          class="mb-6 bg-red-500/10 border-l-4 border-red-400 p-4 rounded-3xl shadow-slate-950/40 animate-fade-in"
+        >
+          <div class="flex items-start gap-3">
+            <div class="bg-red-600/10 p-1 rounded-full flex-shrink-0">
+              <AlertCircle :size="16" class="text-red-300" />
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-red-200">
+                Erro ao cadastrar agendamento
+              </p>
+              <p class="text-xs text-red-300 mt-1">
+                {{ errorMessage }}
+              </p>
+            </div>
+            <button
+              @click="showError = false"
+              class="text-red-300 hover:text-red-200"
+            >
+              <X :size="14" />
+            </button>
+          </div>
+        </div>
+
         <!-- Mensagem de sucesso -->
         <div
           v-if="showSuccess"
-          class="mb-6 bg-green-50 border-l-4 border-green-400 p-4 rounded-lg shadow-sm animate-fade-in"
+          class="mb-6 bg-emerald-500/10 border-l-4 border-emerald-400 p-4 rounded-3xl shadow-slate-950/40 animate-fade-in"
         >
-          <div class="flex items-center gap-3">
-            <div class="bg-green-100 p-1 rounded-full">
-              <Save :size="16" class="text-green-600" />
+          <div class="flex items-start gap-3">
+            <div class="bg-emerald-600/10 p-1 rounded-full flex-shrink-0">
+              <CheckCircle :size="16" class="text-emerald-300" />
             </div>
-            <div>
-              <p class="text-sm font-medium text-green-800">
+            <div class="flex-1">
+              <p class="text-sm font-medium text-emerald-200">
                 Agendamento cadastrado com sucesso!
               </p>
-              <p class="text-xs text-green-600 mt-1">
-                Agendamento foi adicionado ao sistema.
+              <p class="text-xs text-emerald-300 mt-1">
+                O comando será executado na data e horário programados.
               </p>
             </div>
+            <button
+              @click="showSuccess = false"
+              class="text-emerald-300 hover:text-emerald-200"
+            >
+              <X :size="14" />
+            </button>
           </div>
         </div>
 
         <!-- Formulário -->
         <form @submit.prevent="submit" class="space-y-6">
-          <!-- Card principal -->
-          <div class="bg-white shadow rounded-lg overflow-hidden">
-            <div class="p-6 border-b bg-gradient-to-r from-gray-50 to-white">
+          <div
+            class="bg-slate-900 border border-slate-800 shadow-slate-950/40 rounded-3xl overflow-hidden"
+          >
+            <div class="p-6 border-b border-slate-800 bg-slate-950">
               <div class="flex items-center gap-3">
-                <div class="bg-blue-100 p-2 rounded-lg">
-                  <Activity :size="20" class="text-blue-600" />
+                <div class="bg-emerald-500/10 p-2 rounded-lg">
+                  <Clock :size="20" class="text-emerald-300" />
                 </div>
                 <div>
-                  <h3 class="text-lg font-semibold text-gray-800">
+                  <h3 class="text-lg font-semibold text-white">
                     Informações do agendamento
                   </h3>
-                  <p class="text-sm text-gray-500 mt-1">
-                    Preencha os dados abaixo para fazer um novo agendamento para o
-                    dispositivo.
+                  <p class="text-sm text-slate-400 mt-1">
+                    Agende um comando para ser executado no dispositivo.
                   </p>
                 </div>
               </div>
             </div>
 
             <div class="p-6 space-y-6">
-              <!-- Nome do Sensor -->
+              <!-- Seletor de Comando -->
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="block text-sm font-medium text-slate-300 mb-2">
                   Comando *
                 </label>
-                <input
+                <select
                   v-model="form.command"
-                  type="text"
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                  placeholder="Ex: Sensor de Temperatura da Sala"
+                  class="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-900 text-slate-100 focus:ring-emerald-500 focus:border-emerald-500 transition disabled:opacity-50"
                   :class="{ 'border-red-500': form.errors.command }"
-                />
-                <p
-                  v-if="form.errors.command"
-                  class="mt-1 text-sm text-red-600 flex items-center gap-1"
+                  :disabled="isLoading"
                 >
+                  <option disabled value="">Selecione um comando</option>
+                  <option
+                    v-for="cmd in available_commands"
+                    :key="cmd.value"
+                    :value="cmd.value"
+                  >
+                    {{ cmd.label }}
+                  </option>
+                </select>
+
+                <div v-if="form.errors.command" class="mt-1 text-sm text-red-400 flex items-center gap-1">
                   <AlertCircle :size="12" />
                   {{ form.errors.command }}
-                </p>
+                </div>
               </div>
 
-              <!-- Localização do sensor -->
-
+              <!-- Data/Hora de Execução -->
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="block text-sm font-medium text-slate-300 mb-2">
                   Executar em: *
                 </label>
                 <input
                   v-model="form.execute_at"
-                  type="text"
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                  placeholder="Ex: Sala de Estar / Quarto ..."
+                  type="datetime-local"
+                  :min="minDateTime"
+                  class="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-900 text-slate-100 placeholder-slate-500 focus:ring-emerald-500 focus:border-emerald-500 transition disabled:opacity-50"
                   :class="{ 'border-red-500': form.errors.execute_at }"
+                  :disabled="isLoading"
                 />
-                <p
-                  v-if="form.errors.execute_at"
-                  class="mt-1 text-sm text-red-600 flex items-center gap-1"
-                >
-                  <AlertCircle :size="12" />
-                  {{ form.errors.execute_at }}
-                </p>
+
+                <div class="mt-1 flex items-center justify-between">
+                  <p v-if="form.errors.execute_at" class="text-sm text-red-400 flex items-center gap-1">
+                    <AlertCircle :size="12" />
+                    {{ form.errors.execute_at }}
+                  </p>
+                  <p v-else class="text-xs text-slate-500">
+                    Data e hora em que o comando será executado
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -176,18 +237,20 @@ const submit = () => {
           <div class="flex items-center justify-end gap-4">
             <button
               type="button"
-              @click="$inertia.visit(route('sensors.index'))"
-              class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
+              @click="cancel"
+              class="px-6 py-2 border border-slate-700 rounded-lg text-slate-300 hover:bg-slate-800 transition disabled:opacity-50"
+              :disabled="isLoading"
             >
               Cancelar
             </button>
+
             <button
               type="submit"
-              :disabled="form.processing"
-              class="flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+              :disabled="isLoading || !form.command || !form.execute_at"
+              class="flex items-center gap-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save :size="18" />
-              {{ form.processing ? "Salvando..." : "Cadastrar Sensor" }}
+              {{ isLoading ? "Processando..." : "Agendar Comando" }}
             </button>
           </div>
         </form>
@@ -202,7 +265,6 @@ const submit = () => {
     opacity: 0;
     transform: translateY(-10px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);

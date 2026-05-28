@@ -11,10 +11,10 @@
 
     <div
       v-if="loading"
-      class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 rounded-lg"
+      class="absolute inset-0 flex items-center justify-center bg-slate-950/75 rounded-lg"
     >
       <div
-        class="animate-spin rounded-full h-4 w-4 border-2 border-gray-600 border-t-transparent"
+        class="animate-spin rounded-full h-4 w-4 border-2 border-slate-300 border-t-transparent"
       ></div>
     </div>
   </button>
@@ -50,17 +50,18 @@ export default {
   computed: {
     buttonClasses() {
       return {
-        "hover:bg-gray-100": !this.loading,
+        "bg-slate-800": this.currentStatus === "offline" && !this.loading,
+        "hover:bg-slate-700": this.currentStatus === "offline" && !this.loading,
+        "bg-emerald-500/10": this.currentStatus === "online" && !this.loading,
+        "hover:bg-emerald-500/15": this.currentStatus === "online" && !this.loading,
         "cursor-not-allowed opacity-50": this.loading,
-        "bg-green-50": this.currentStatus === "online" && !this.loading,
-        "hover:bg-green-100": this.currentStatus === "online" && !this.loading,
       };
     },
 
     iconClasses() {
       return {
-        "text-green-600": this.currentStatus === "online",
-        "text-gray-400": this.currentStatus === "offline",
+        "text-emerald-300": this.currentStatus === "online",
+        "text-slate-400": this.currentStatus === "offline",
         "animate-pulse": this.loading,
       };
     },

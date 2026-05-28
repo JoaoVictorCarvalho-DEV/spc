@@ -23,7 +23,9 @@ Route::get('/dashboard', [DeviceController::class, 'index'])->middleware(['auth'
 
 Route::prefix('devices')->name('devices.')->group(function () {
     Route::get('/create', [DeviceController::class, 'create'])->name('create');
-    Route::post('/', [DeviceController::class, 'store'])->name('store');
+
+    Route::post('/create', [DeviceController::class, 'store'])->name('store');
+
     Route::get('/{device}', [DeviceController::class, 'show'])->name('show');
     Route::post('/device/shutdown', [DeviceController::class, 'shutdown'])->name('shutdown');
 })->middleware(['auth', 'verified']);
@@ -31,7 +33,7 @@ Route::prefix('devices')->name('devices.')->group(function () {
 
 Route::prefix('commands')->name('commands.')->group(function () {
     Route::get('/create/device/{device_id}', [CommandController::class, 'create'])->name('create');
-    Route::post('/create/device/{device_id}', [CommandController::class, 'storeAgendado'])->name('store');
+    Route::post('/create/device/{device_id}', [CommandController::class, 'storeForm'])->name('storeForm');
 })->middleware(['auth', 'verified']);
 
 
