@@ -17,7 +17,8 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        $devices = Device::all();
+        $user = auth()->user();
+        $devices = $user->devices()->get();
         $dashboardStats = [
             [
                 'name' => 'Dispositivos ativos',
