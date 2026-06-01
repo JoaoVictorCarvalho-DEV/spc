@@ -15,7 +15,8 @@ class Telemetry extends Model
         'current',
         'voltage',
         'power',
-        'created_at',
+        'measured_at',
+        'created_at'
     ];
 
     public function device(){
