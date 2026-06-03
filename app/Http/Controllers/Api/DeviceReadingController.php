@@ -40,7 +40,7 @@ class DeviceReadingController extends Controller
 
 
 
-        if ($data['current'] < 0.2) {
+        if ($data['current'] < 0.3) {
             Event::create([
                 'device_id'   => $device->id,
                 'event_type'        => 'unplugged',
