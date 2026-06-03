@@ -1,59 +1,37 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Smart Power Controller - Sistema Web e IoT
+![alt text](image.png)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+O **Smart Power Controller** é um ecossistema projetado para o monitoramento, análise de métricas e gerenciamento remoto de consumo energético de eletrodomésticos via hardware IoT para a disciplina de Engenharia de Software do professor Heleno Cardoso.
 
-## About Laravel
+## Materiais
+- [DOCUMENTO DE REQUISITOS](https://github.com/JoaoVictorCarvalho-DEV/trabalho_arquitetura_de_software/blob/main/requisitos/DOCUMENTO%20DE%20REQUISITOS.docx)
+- [DIAGRAMAS](https://github.com/JoaoVictorCarvalho-DEV/trabalho_arquitetura_de_software/tree/main/diagramas)
+- [BANCO DE DADOS](https://github.com/JoaoVictorCarvalho-DEV/trabalho_arquitetura_de_software/tree/main/banco_de_dados)
+- [DOCUMENTAÇÃO](https://github.com/JoaoVictorCarvalho-DEV/trabalho_arquitetura_de_software/blob/main/Documenta%C3%A7%C3%A3o%20Smart%20Power%20Controller.docx)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Engenharia
+- **Padrão Arquitetural:** MVC (Model-View-Controller) isolando regras de negócio da API, interface cliente e firmware.
+- **API PADRÃO REST**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tecnologias para implementação
+- **BACKEND** PHP + Laravel
+- **FRONTEND** VueJS
+- **DATABASE** POSTGRESS
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Sistema web
+- **SPC** https://spc-production-0b6c.up.railway.app
 
-## Learning Laravel
+## Hospedagem
+- **Railway** https://railway.com/
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Design de Interface e Protótipo no Figma
+https://www.figma.com/make/zWf6iIngYgXNrhtHau8E1g/Smart-Power-Controller?t=cAHUzON6IuXkBzmQ-1
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Fontes
+https://github.com/CloudEducationBrazil/WydenEngenhariaDeSoftware
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Equipe e Desenvolvimento
+JOÃO VÍCTOR MIRANDA
+LUIZ FERNANDO BARBOSA
+MARIA EDUARDA OLIVEIRA
